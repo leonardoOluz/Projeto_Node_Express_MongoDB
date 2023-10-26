@@ -1,0 +1,16 @@
+{
+  "name": "express_mongo",
+  "version": "1.0.0",
+  "description": "Curso Express e MongoDB",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev":"nodemon server.js"
+  },
+  "author": "Leonardo_Luz",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
