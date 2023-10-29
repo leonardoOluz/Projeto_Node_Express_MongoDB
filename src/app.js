@@ -19,12 +19,29 @@ const livros = [
     }
 ]
 
+function buscaLivros(id) {
+    return livros.findIndex(livro => {
+        return livro.id === Number(id);
+    });
+};
+
 app.get('/', (req, res) => {
     res.status(200).send('Curso de Node.Js com Juliana');
 });
 
 app.get('/livros', (req, res) => {
     res.status(200).json(livros);
+});
+
+app.get('/livros/:id', (req, res) => {
+    const index = buscaLivros(req.params.id);
+    res.status(200).json(livros[index]);
+});
+
+app.put('/livros/:id', (req, res) => {
+    const index = buscaLivros(req.params.id);
+    livros[index].titulo = req.body.titulo;
+    res.status(201).json(livros);
 });
 
 app.post('/livros', (req, res) => {
