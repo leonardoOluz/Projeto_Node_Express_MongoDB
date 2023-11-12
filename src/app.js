@@ -5,11 +5,11 @@ import routes from "./routes/index.js";
 const conexao = await dataBaseConection();
 
 conexao.on("error", (erro) => {
-    console.error("Erro de conexão", erro);
+  console.error("Erro de conexão", erro);
 });
 
 conexao.once("open", () => {
-    console.log("Conection successfully !");
+  console.log("Conection successfully !");
 });
 
 const app = express();
