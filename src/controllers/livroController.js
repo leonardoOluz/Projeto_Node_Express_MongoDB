@@ -1,3 +1,4 @@
+import NaoEncontrado from "../erros/NaoEncontrado.js";
 import livro from "../models/Livro.js";
 
 class LivroController {
@@ -15,10 +16,10 @@ class LivroController {
     try {
       const id = req.params.id;
       const livro_Por_Id = await livro.findById(id);
-      if (livro_Por_Id !== null ) {
-        res.status(200).json(livro_Por_Id);        
+      if (livro_Por_Id !== null) {
+        res.status(200).json(livro_Por_Id);
       } else {
-        res.status(404).json({message: "Id não localizado."});
+        next( new NaoEncontrado("Id do Livro não foi encontrado."));      
       }
     } catch (error) {
       next(error);
@@ -37,8 +38,12 @@ class LivroController {
   static async atualizarLivro(req, res, next) {
     try {
       const id = req.params.id;
-      await livro.findByIdAndUpdate(id, req.body);
-      res.status(201).json("Livro atualizado com sucesso !");
+      const livroUpdate = await livro.findByIdAndUpdate(id, req.body);
+      if (livroUpdate !== null) {
+        res.status(201).json("Livro atualizado com sucesso !");
+      } else {
+        next(new NaoEncontrado("Id do Livro não foi encontrado."));
+      }
     } catch (error) {
       next(error);
     }
@@ -47,8 +52,12 @@ class LivroController {
   static async excluirLivro(req, res, next) {
     try {
       const id = req.params.id;
-      await livro.findByIdAndDelete(id);
-      res.status(201).json({ message: "Livro excluído com sucesso!" });
+      const livroDelete = await livro.findByIdAndDelete(id);
+      if (livroDelete !== null) {
+        res.status(201).json({ message: "Livro excluído com sucesso!" });
+      } else {
+        next(new NaoEncontrado("Id do Livro não foi encontrado."));
+      }
     } catch (error) {
       next(error);
     }
@@ -57,8 +66,13 @@ class LivroController {
   static async listarLivrosPorEditora(req, res, next) {
     const editora = req.query.editora;
     try {
-      const livroEditora = await livro.find({editora: editora});
-      res.status(200).json(livroEditora);
+      const livroEditora = await livro.find({ editora: editora });
+      console.log(livroEditora);
+      if (livroEditora.length == []) {
+        next( new NaoEncontrado("Livro por editora não encontrado"));
+      } else {
+        res.status(200).json(livroEditora);
+      }
     } catch (error) {
       next(error);
     }
