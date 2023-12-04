@@ -1,5 +1,5 @@
 import NaoEncontrado from "../erros/NaoEncontrado.js";
-import livro from "../models/Livro.js";
+import { livro } from "../models/index.js";
 
 class LivroController {
 
@@ -19,7 +19,7 @@ class LivroController {
       if (livro_Por_Id !== null) {
         res.status(200).json(livro_Por_Id);
       } else {
-        next( new NaoEncontrado("Id do Livro não foi encontrado."));      
+        next(new NaoEncontrado("Id do Livro não foi encontrado."));
       }
     } catch (error) {
       next(error);
@@ -63,13 +63,18 @@ class LivroController {
     }
   }
 
-  static async listarLivrosPorEditora(req, res, next) {
-    const editora = req.query.editora;
+  static async listarLivrosPorFiltro(req, res, next) { 
     try {
-      const livroEditora = await livro.find({ editora: editora });
-      console.log(livroEditora);
+      const { editora, titulo } = req.query;
+
+      const busca = {};
+      
+      if (editora) busca.editora = editora;
+      if (titulo) busca.titulo = titulo;
+      
+      const livroEditora = await livro.find(busca); 
       if (livroEditora.length == []) {
-        next( new NaoEncontrado("Livro por editora não encontrado"));
+        next(new NaoEncontrado("Livro por editora não encontrado"));
       } else {
         res.status(200).json(livroEditora);
       }
