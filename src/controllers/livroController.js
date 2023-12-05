@@ -63,16 +63,18 @@ class LivroController {
     }
   }
 
-  static async listarLivrosPorFiltro(req, res, next) { 
+  static async listarLivrosPorFiltro(req, res, next) {
     try {
       const { editora, titulo } = req.query;
 
       const busca = {};
-      
-      if (editora) busca.editora = editora;
-      if (titulo) busca.titulo = titulo;
-      
-      const livroEditora = await livro.find(busca); 
+
+      const regex = RegExp(titulo, "i");// Usando regex nativo do NodeJs.
+
+      if (editora) busca.editora = { $regex: editora, $options: "i" };// Usando regex do mongoose.
+      if (titulo) busca.titulo = regex;
+
+      const livroEditora = await livro.find(busca);
       if (livroEditora.length == []) {
         next(new NaoEncontrado("Livro por editora não encontrado"));
       } else {
