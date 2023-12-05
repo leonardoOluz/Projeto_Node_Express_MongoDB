@@ -1,6 +1,6 @@
 // eslint-disable-next-line quotes
 import './validadorGlobal.js';
-import livro from "./Livro.js";
-import {autor} from "./Autor.js";
+import livros from "./Livro.js";
+import {autores} from "./Autor.js";
 
-export { livro, autor};
+export { livros, autores};
